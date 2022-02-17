@@ -150,4 +150,8 @@ class Expression
   string _infix, _postfix, _prefix;
 };
 
+// Gets the precedence of a character according to the 
+// rules of postfix operator precedence
+int precedence(char c);
+
 #endif

@@ -11,6 +11,11 @@ TEST(postfix, someParens) {
   EXPECT_EQ("13+24+*", e.getPostfix());
 }
 
+TEST(postfix, multipleParentheses) {
+  Expression e("(((2)))");
+  EXPECT_EQ("2", e.getPostfix());
+}
+
 TEST(evaluate, two) {
   Expression e("2");
   EXPECT_EQ(2, e.getValue());
