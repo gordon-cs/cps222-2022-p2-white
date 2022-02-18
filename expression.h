@@ -20,7 +20,10 @@
 
 #include <exception>
 #include <string>
+#include <stack>
 using std::string;
+using std::stack;
+
 
 // The constructor of class Expression throws an exception of this type
 
@@ -153,5 +156,10 @@ class Expression
 // Gets the precedence of a character according to the 
 // rules of postfix operator precedence
 int precedence(char c);
+
+
+// Gets the top two values from a stack pointer and puts them
+// inside one of the past in value pointers
+void getValsFromStack(stack<int> *numStack, int *val1, int *val2);
 
 #endif

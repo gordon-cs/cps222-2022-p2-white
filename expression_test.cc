@@ -16,6 +16,21 @@ TEST(postfix, multipleParentheses) {
   EXPECT_EQ("2", e.getPostfix());
 }
 
+TEST(postfix, someAddition) {
+  Expression e("2+3+4");
+  EXPECT_EQ("234++", e.getPostfix());
+}
+
+TEST(postfix, hw3aMod) {
+  Expression e("(7+2)*(3+4)-1");
+  EXPECT_EQ("72+34+*1-", e.getPostfix());
+}
+
+TEST(postfix, hw3bMod) {
+  Expression e("8-((4+1)*2-5)/9");
+  EXPECT_EQ("841+2*5-9/-", e.getPostfix());
+}
+
 TEST(evaluate, two) {
   Expression e("2");
   EXPECT_EQ(2, e.getValue());
@@ -26,6 +41,7 @@ TEST(evaluate, someParens) {
   EXPECT_EQ(24, e.getValue());
 }
 
+/*
 // The tests below illustrate the error messages
 // (exception  descriptions) my tests will look for.
 // Please throw exceptions with these messages.
@@ -75,3 +91,5 @@ TEST(postfixError, missingParen) {
     EXPECT_EQ("Unbalanced parentheses", e.getDescription());
   }
 }
+
+*/
