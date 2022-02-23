@@ -41,7 +41,7 @@ TEST(evaluate, someParens) {
   EXPECT_EQ(24, e.getValue());
 }
 
-/*
+
 // The tests below illustrate the error messages
 // (exception  descriptions) my tests will look for.
 // Please throw exceptions with these messages.
@@ -91,5 +91,3 @@ TEST(postfixError, missingParen) {
     EXPECT_EQ("Unbalanced parentheses", e.getDescription());
   }
 }
-
-*/

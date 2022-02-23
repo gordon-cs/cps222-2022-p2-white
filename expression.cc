@@ -8,32 +8,63 @@
  */
 
 #include "expression.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 /* The following methods are to be written by students, and constitute
  * CPS222 Project 2.
  */
 
 string Expression::convertToPostfix(string infix) {
+  if (infix.size() == 0) {
+    throw SyntaxError(0, "Operand expected");
+  }
+
+  bool expectOperator = false;
+  int parenCount = 0;
   stack<char> operators;
   string postfix = "";
   for (int i = 0; i < infix.length(); i++) {
     if (infix[i] > 47 && infix[i] < 58) {
+      // Error checking
+      if (expectOperator) {
+        throw SyntaxError(i, "Operator expected");
+      }
+      expectOperator = true;
+
       postfix += infix[i];
     } else if (infix[i] == '(') {
       operators.push(infix[i]);
+      parenCount++;
     } else if (infix[i] == ')') {
+      if (parenCount == 0) {
+        throw SyntaxError(i, "Unbalanced parentheses");
+      }
       while (operators.top() != '(') {
         postfix += operators.top();
         operators.pop();
       }
       // Remove the '('
       operators.pop();
-    } else {
+    } else if (infix[i] == '*' || 
+                infix[i] == '+' || 
+                infix[i] == '-' || 
+                infix[i] == '/') {
+      // Error Checking
+      if (!expectOperator) {
+        throw SyntaxError(i, "Operand expected");
+      }
+      expectOperator = false;
+
       while (!operators.empty() && precedence(infix[i]) < precedence(operators.top())) {
         postfix += operators.top();
         operators.pop();
       }
       operators.push(infix[i]);
+    } else {
+      // Error checking
+      throw SyntaxError(i, "Invalid Character");
     }
   }
 
@@ -41,7 +72,6 @@ string Expression::convertToPostfix(string infix) {
     postfix += operators.top();
     operators.pop();
   }
-  
   return string(postfix);
 }
 
