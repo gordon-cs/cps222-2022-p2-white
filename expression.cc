@@ -47,6 +47,7 @@ string Expression::convertToPostfix(string infix) {
       }
       // Remove the '('
       operators.pop();
+      parenCount--;
     } else if (infix[i] == '*' || 
                 infix[i] == '+' || 
                 infix[i] == '-' || 
@@ -65,6 +66,15 @@ string Expression::convertToPostfix(string infix) {
     } else {
       // Error checking
       throw SyntaxError(i, "Invalid Character");
+    }
+  }
+
+  if (parenCount != 0) {
+    for (int i = 0; i < infix.length(); i++) {
+      if (infix[i] == '(') {
+        int unbalancedParen = i;
+        throw SyntaxError(unbalancedParen, "Unbalanced parentheses");
+      }
     }
   }
 
