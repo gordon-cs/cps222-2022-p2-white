@@ -58,7 +58,7 @@ string Expression::convertToPostfix(string infix) {
       }
       expectOperator = false;
 
-      while (!operators.empty() && precedence(infix[i]) < precedence(operators.top())) {
+      while (!operators.empty() && precedence(infix[i]) <= precedence(operators.top())) {
         postfix += operators.top();
         operators.pop();
       }

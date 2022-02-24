@@ -6,6 +6,32 @@ TEST(postfix, two) {
   EXPECT_EQ("2", e.getPostfix());
 }
 
+TEST(postfix, someAddition) {
+  Expression e("2+3+4");
+  EXPECT_EQ("23+4+", e.getPostfix());
+}
+
+TEST(postfix, addMult) {
+  Expression e("2+3+4+3*4");
+  EXPECT_EQ("23+4+34*+", e.getPostfix());
+}
+
+// ask about this one !!!!!!
+TEST(postfix, addMultDiv) {
+  Expression e("2+3*4+5*6/2");
+  EXPECT_EQ("234*+56*2/+", e.getPostfix());
+}
+
+TEST(postfix, twoParen) {
+  Expression e("(2)");
+  EXPECT_EQ("2", e.getPostfix());
+}
+
+TEST(postfix, parenAddMultParenDiv) {
+  Expression e("(1+3)*(2+4)");
+  EXPECT_EQ("13+24+*", e.getPostfix());
+}
+
 TEST(postfix, someParens) {
   Expression e("(1+3)*(2+4)");
   EXPECT_EQ("13+24+*", e.getPostfix());
@@ -16,19 +42,19 @@ TEST(postfix, multipleParentheses) {
   EXPECT_EQ("2", e.getPostfix());
 }
 
-TEST(postfix, someAddition) {
-  Expression e("2+3+4");
-  EXPECT_EQ("234++", e.getPostfix());
-}
-
-TEST(postfix, hw3aMod) {
+TEST(postfix, hw23aPostfix) {
   Expression e("(7+2)*(3+4)-1");
   EXPECT_EQ("72+34+*1-", e.getPostfix());
 }
 
-TEST(postfix, hw3bMod) {
+TEST(postfix, hw23bPostfix) {
   Expression e("8-((4+1)*2-5)/9");
   EXPECT_EQ("841+2*5-9/-", e.getPostfix());
+}
+
+TEST(postfix, hw23cPostfix) {
+  Expression e("(3*2+1)/(4+5)");
+  EXPECT_EQ("32*1+45+/", e.getPostfix());
 }
 
 TEST(evaluate, two) {
