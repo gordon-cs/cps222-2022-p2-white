@@ -98,6 +98,9 @@ int Expression::evaluate(string postfix) {
       numStack->push(*val1 * *val2);
     } else if (postfix[i] == '/') {
       getValsFromStack(numStack, val1, val2);
+      if (*val2 == 0) {
+        throw DivideByZeroError(i);
+      }
       numStack->push(*val1 / *val2);
     } else if (postfix[i] == '-') {
       getValsFromStack(numStack, val1, val2);
