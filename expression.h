@@ -159,7 +159,7 @@ int precedence(char c);
 
 
 // Gets the top two values from a stack pointer and puts them
-// inside one of the past in value pointers
+// inside one of the passed in value pointers
 void getValsFromStack(stack<int> *numStack, int *val1, int *val2);
 
 #endif

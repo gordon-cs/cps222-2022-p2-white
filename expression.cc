@@ -29,32 +29,24 @@ string Expression::convertToPostfix(string infix) {
 
   for (int i = 0; i < infix.size(); i++) {
     if (infix[i] > 47 && infix[i] < 58) {
-
       // Error checking: make sure operand expected
       if (expectOperator) {
         throw SyntaxError(i, "Operator expected");
       }
       expectOperator = true;
 
-
       postfix += infix[i];
-
     } else if (infix[i] == '(') {
-
       // Error checking: make sure operator before open paren
       if (expectOperator) {
         throw SyntaxError(i, "Operator expected");
       }
-
       // Error checking: Keep track of opened paren position and value
       parenPos.push(i);
       parenCount++;
 
-
       operators.push(infix[i]);
-
     } else if (infix[i] == ')') {
-
       // Error Checking: Make sure paren was expected
       if (parenCount == 0) {
         throw SyntaxError(i, "Unbalanced parentheses");
@@ -66,14 +58,12 @@ string Expression::convertToPostfix(string infix) {
       parenPos.pop();
       parenCount--;
 
-
       while (operators.top() != '(') {
         postfix += operators.top();
         operators.pop();
       }
       // Remove the '('
       operators.pop();
-
     } else if (infix[i] == '*' || 
                 infix[i] == '+' || 
                 infix[i] == '-' || 
@@ -152,9 +142,39 @@ void getValsFromStack(stack<int> *numStack, int *val1, int *val2) {
   numStack->pop(); 
 }
 
-
 string Expression::convertToPrefix(string postfix) {
-  return string(""); // Students: replace code and remove this comment
+  char lastChar = postfix[postfix.size() - 1];
+  if (lastChar > 47 && lastChar < 58) {
+    return postfix;
+  } else if (lastChar == '#') {
+    postfix.pop_back();
+    postfix = "#" + postfix;
+    return convertToPrefix(postfix);
+  } else if (lastChar == '*' || 
+                lastChar == '+' || 
+                lastChar == '-' || 
+                lastChar == '/') {
+    int operandsNeeded = 1;
+    postfix.pop_back();
+    for (int i = postfix.size() - 1; i >= 0; i--) {
+      if (postfix[i] > 47 && postfix[i] < 58) {
+        operandsNeeded--;
+      } else if (postfix[i] == '#') {
+        // Do nothing
+      } else if (postfix[i] == '*' || 
+                postfix[i] == '+' || 
+                postfix[i] == '-' || 
+                postfix[i] == '/') {
+        operandsNeeded++;
+      }
+
+      if (operandsNeeded == 0) {
+        return lastChar + convertToPrefix(postfix.substr(0, i)) + convertToPrefix(postfix.substr(i));
+      }
+    }
+  }
+
+  return ("Could not convert");
 }
 
 int precedence(char c) {

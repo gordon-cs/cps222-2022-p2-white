@@ -215,6 +215,53 @@ TEST(evaluate, unary10) {
   EXPECT_EQ(-1, e.getValue());
 }
 
+// Prefix checking tests
+
+TEST(prefix, singleVal) {
+  Expression e("2");
+  EXPECT_EQ("2", e.getPrefix());
+}
+
+TEST(prefix, add) {
+  Expression e("2+3+4");
+  EXPECT_EQ("++234", e.getPrefix());
+}
+
+TEST(prefix, addMult) {
+  Expression e("2+3+4+3*4");
+  EXPECT_EQ("+++234*34", e.getPrefix());
+}
+
+TEST(prefix, addMultDiv) {
+  Expression e("2+3*4+5*6/2");
+  EXPECT_EQ("++2*34/*562", e.getPrefix());
+}
+
+TEST(prefix, paren) {
+  Expression e("(2)");
+  EXPECT_EQ("2", e.getPrefix());
+}
+
+TEST(prefix, parenAddMult) {
+  Expression e("(1+3)*(2+4)");
+  EXPECT_EQ("*+13+24", e.getPrefix());
+}
+
+TEST(prefix, longParenAddMult) {
+  Expression e("3*((2+4)*(1+1)+7)/(2*5+9)");
+  EXPECT_EQ("/*3+*+24+117+*259", e.getPrefix());
+}
+
+TEST(prefix, longParenAddMultSub) {
+  Expression e("7+4*(2+4*(7-2)*(5*(4-2))/(5*4*5))");
+  EXPECT_EQ("+7*4+2/**4-72*5-42**545", e.getPrefix());
+}
+
+TEST(prefix, multipleParen) {
+  Expression e("(((2)))");
+  EXPECT_EQ("2", e.getPrefix());
+}
+
 // Error checking tests
 
 TEST(postfixError, empty) {
