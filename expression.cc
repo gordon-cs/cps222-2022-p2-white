@@ -79,17 +79,18 @@ string Expression::convertToPostfix(string infix) {
                 infix[i] == '-' || 
                 infix[i] == '/') {
       // Error checking: make sure operator expected
-      if (!expectOperator) {
+      if (!expectOperator && infix[i] != '-') {
         throw SyntaxError(i, "Operand expected");
+      } else if (!expectOperator && infix[i] == '-') {
+        operators.push('#');
+      } else {
+        expectOperator = false;
+        while (!operators.empty() && precedence(infix[i]) <= precedence(operators.top())) {
+          postfix += operators.top();
+          operators.pop();
+        }
+        operators.push(infix[i]);
       }
-      expectOperator = false;
-
-
-      while (!operators.empty() && precedence(infix[i]) <= precedence(operators.top())) {
-        postfix += operators.top();
-        operators.pop();
-      }
-      operators.push(infix[i]);
 
     } else {
       // If not a valid mathematical operation, throw error
@@ -135,6 +136,10 @@ int Expression::evaluate(string postfix) {
     } else if (postfix[i] == '+') {
       getValsFromStack(numStack, val1, val2);
       numStack->push(*val1 + *val2);
+    } else if (postfix[i] == '#') {
+      *val1 = -numStack->top();
+      numStack->pop();
+      numStack->push(*val1);
     }
   }
   return numStack->top();
@@ -153,7 +158,9 @@ string Expression::convertToPrefix(string postfix) {
 }
 
 int precedence(char c) {
-  if (c == '/' || c == '*') {
+  if (c == '#') {
+    return 3;
+  } else if (c == '/' || c == '*') {
     return 2;
   } else if (c == '+' || c == '-') {
     return 1;

@@ -113,13 +113,111 @@ TEST(evaluate, hw23a) {
   EXPECT_EQ(62, e.getValue());
 }
 
-// The tests below illustrate the error messages
-// (exception  descriptions) my tests will look for.
-// Please throw exceptions with these messages.
+// Unary Tests
 
-// Comment out tests for options you don't do.
+TEST(postfix, unary1) {
+  Expression e("-3");
+  EXPECT_EQ("3#", e.getPostfix());
+}
+
+TEST(evaluate, unary1) {
+  Expression e("-3");
+  EXPECT_EQ(-3, e.getValue());
+}
+
+TEST(postfix, unary2) {
+  Expression e("2*-3");
+  EXPECT_EQ("23#*", e.getPostfix());
+}
+
+TEST(evaluate, unary2) {
+  Expression e("2*-3");
+  EXPECT_EQ(-6, e.getValue());
+}
+
+TEST(postfix, unary3) {
+  Expression e("2*(-3)");
+  EXPECT_EQ("23#*", e.getPostfix());
+}
+
+TEST(evaluate, unary) {
+  Expression e("2*(-3)");
+  EXPECT_EQ(-6, e.getValue());
+}
+
+TEST(postfix, unary4) {
+  Expression e("-2*3");
+  EXPECT_EQ("2#3*", e.getPostfix());
+}
+
+TEST(evaluate, unary4) {
+  Expression e("-2*3");
+  EXPECT_EQ(-6, e.getValue());
+}
+
+TEST(postfix, unary5) {
+  Expression e("-2*3");
+  EXPECT_EQ("2#3*", e.getPostfix());
+}
+
+TEST(evaluate, unary5) {
+  Expression e("-2*3");
+  EXPECT_EQ(-6, e.getValue());
+}
+
+TEST(postfix, unary6) {
+  Expression e("--3");
+  EXPECT_EQ("3##", e.getPostfix());
+}
+
+TEST(evaluate, unary6) {
+  Expression e("--3");
+  EXPECT_EQ(3, e.getValue());
+}
+
+TEST(postfix, unary7) {
+  Expression e("---3");
+  EXPECT_EQ("3###", e.getPostfix());
+}
+
+TEST(evaluate, unary7) {
+  Expression e("---3");
+  EXPECT_EQ(-3, e.getValue());
+}
+
+TEST(postfix, unary8) {
+  Expression e("2*---3");
+  EXPECT_EQ("23###*", e.getPostfix());
+}
+
+TEST(evaluate, unary8) {
+  Expression e("2*---3");
+  EXPECT_EQ(-6, e.getValue());
+}
+
+TEST(postfix, unary9) {
+  Expression e("2*(---3)");
+  EXPECT_EQ("23###*", e.getPostfix());
+}
+
+TEST(evaluate, unary9) {
+  Expression e("2*(---3)");
+  EXPECT_EQ(-6, e.getValue());
+}
+
+TEST(postfix, unary10) {
+  Expression e("---2*2+--3");
+  EXPECT_EQ("2###2*3##+", e.getPostfix());
+}
+
+TEST(evaluate, unary10) {
+  Expression e("---2*2+--3");
+  EXPECT_EQ(-1, e.getValue());
+}
+
+// Error checking tests
+
 TEST(postfixError, empty) {
-  // test that invalid empty expression causes syntax error
   try {
     Expression e("");
     e.getPostfix();
