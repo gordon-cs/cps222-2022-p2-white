@@ -27,7 +27,7 @@ string Expression::convertToPostfix(string infix) {
   stack<char> operators;
   string postfix = "";
 
-  for (int i = 0; i < infix.length(); i++) {
+  for (int i = 0; i < infix.size(); i++) {
     if (infix[i] > 47 && infix[i] < 58) {
 
       // Error checking: make sure operand expected
@@ -118,7 +118,7 @@ int Expression::evaluate(string postfix) {
   stack<int> *numStack = new stack<int>;
   int *val1 = new int;
   int *val2 = new int;
-  for (int i = 0; i < postfix.length(); i++) {
+  for (int i = 0; i < postfix.size(); i++) {
     if (postfix[i] > 47 && postfix[i] < 58) {
       numStack->push((int)postfix[i] - 48);
     } else if (postfix[i] == '*') {
