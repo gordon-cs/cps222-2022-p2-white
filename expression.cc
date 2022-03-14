@@ -17,7 +17,7 @@ using std::endl;
  */
 
 string Expression::convertToPostfix(string infix) {
-  
+
   // Error checking variables
   bool expectOperator = false;
   int parenCount = 0;
@@ -64,10 +64,12 @@ string Expression::convertToPostfix(string infix) {
       }
       // Remove the '('
       operators.pop();
-    } else if (infix[i] == '*' || 
-                infix[i] == '+' || 
-                infix[i] == '-' || 
+    } else if (infix[i] == '*' ||
+                infix[i] == '+' ||
+                infix[i] == '-' ||
                 infix[i] == '/') {
+      //RT above comparisons are repeated 2 more times.
+      // DRY says make it a helper function, perhaps isOperator()
       // Error checking: make sure operator expected
       if (!expectOperator && infix[i] != '-') {
         throw SyntaxError(i, "Operand expected");
@@ -109,9 +111,15 @@ int Expression::evaluate(string postfix) {
   int *val1 = new int;
   int *val2 = new int;
   for (int i = 0; i < postfix.size(); i++) {
+    //RT 47 and 58 aren't readable.  You probably want to
+    // compare to '0' and '9' and subtract '0'
     if (postfix[i] > 47 && postfix[i] < 58) {
       numStack->push((int)postfix[i] - 48);
     } else if (postfix[i] == '*') {
+      //RT Even though the helper function gets it down to 1 line,
+      // this line is still repeated 4 times.  Better to check for a
+      // binary operator, and if so, initialize val1 and val2 then
+      // just have 1 line for each operator (the push).
       getValsFromStack(numStack, val1, val2);
       numStack->push(*val1 * *val2);
     } else if (postfix[i] == '/') {
@@ -135,11 +143,12 @@ int Expression::evaluate(string postfix) {
   return numStack->top();
 }
 
+//RT Useful helper, but must have a comment.
 void getValsFromStack(stack<int> *numStack, int *val1, int *val2) {
   *val2 = numStack->top();
   numStack->pop();
   *val1 = numStack->top();
-  numStack->pop(); 
+  numStack->pop();
 }
 
 string Expression::convertToPrefix(string postfix) {
@@ -150,9 +159,9 @@ string Expression::convertToPrefix(string postfix) {
     postfix.pop_back();
     postfix = "#" + postfix;
     return convertToPrefix(postfix);
-  } else if (lastChar == '*' || 
-                lastChar == '+' || 
-                lastChar == '-' || 
+  } else if (lastChar == '*' ||
+                lastChar == '+' ||
+                lastChar == '-' ||
                 lastChar == '/') {
     int operandsNeeded = 1;
     postfix.pop_back();
@@ -161,9 +170,9 @@ string Expression::convertToPrefix(string postfix) {
         operandsNeeded--;
       } else if (postfix[i] == '#') {
         // Do nothing
-      } else if (postfix[i] == '*' || 
-                postfix[i] == '+' || 
-                postfix[i] == '-' || 
+      } else if (postfix[i] == '*' ||
+                postfix[i] == '+' ||
+                postfix[i] == '-' ||
                 postfix[i] == '/') {
         operandsNeeded++;
       }
@@ -177,6 +186,7 @@ string Expression::convertToPrefix(string postfix) {
   return ("Could not convert");
 }
 
+//RT Good helper function.  Must have a comment.
 int precedence(char c) {
   if (c == '#') {
     return 3;
